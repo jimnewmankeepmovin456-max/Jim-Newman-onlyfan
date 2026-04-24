@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jim Newman Fans Only Registration Portal</title>
+    <meta
+      name="description"
+      content="Professional Jim Newman fan registration portal with an appreciation message, fan conduct rules, and imposter awareness guidance."
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f4ec;
+        --surface: #fffdf7;
+        --surface-strong: #ffffff;
+        --ink: #171715;
+        --muted: #686259;
+        --line: rgba(23, 23, 21, 0.14);
+        --gold: #c79a43;
+        --gold-strong: #956c25;
+        --blue: #2367b4;
+        --blue-soft: #e6f0ff;
+        --danger: #9d392f;
+        --shadow: rgba(33, 29, 20, 0.18);
+        --field: #fffdf8;
+        font-family: "Aptos", "Trebuchet MS", Verdana, sans-serif;
+      }
+
+      body[data-theme="dark"] {
+        color-scheme: dark;
+        --bg: #101216;
+        --surface: #171a20;
+        --surface-strong: #20242c;
+        --ink: #f5f0e6;
+        --muted: #c9c0b3;
+        --line: rgba(245, 240, 230, 0.16);
+        --gold: #d1a44b;
+        --gold-strong: #f0c76a;
+        --blue: #71a9ff;
+        --blue-soft: rgba(113, 169, 255, 0.14);
+        --danger: #ff9a8d;
+        --shadow: rgba(0, 0, 0, 0.36);
+        --field: #11151b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          linear-gradient(135deg, rgba(199, 154, 67, 0.18), transparent 34%),
+          radial-gradient(circle at 92% 8%, rgba(35, 103, 180, 0.22), transparent 26%),
+          linear-gradient(180deg, var(--bg), var(--bg));
+        color: var(--ink);
+        transition: background 220ms ease, color 220ms ease;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        opacity: 0.52;
+        background-image:
+          linear-gradient(var(--line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--line) 1px, transparent 1px);
+        background-size: 44px 44px;
+        mask-image: linear-gradient(180deg, #000 0%, transparent 72%);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .skip-link {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        z-index: 10;
+        transform: translateY(-150%);
+        background: var(--ink);
+        color: var(--bg);
+        padding: 10px 12px;
+        font-weight: 800;
+      }
+
+      .skip-link:focus {
+        transform: translateY(0);
+      }
+
+      .shell {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 20px 0 58px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 8px 0 18px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+        font-weight: 900;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 48px;
+        height: 48px;
+        flex: 0 0 auto;
+        place-items: center;
+        border: 2px solid var(--ink);
+        background: var(--gold);
+        color: #12100b;
+        box-shadow: 5px 5px 0 var(--ink);
+      }
+
+      .brand small {
+        display: block;
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+      }
+
+      .theme-toggle {
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3px;
+        min-width: 164px;
+        min-height: 44px;
+        padding: 4px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--surface);
+        color: var(--ink);
+        box-shadow: 0 10px 26px var(--shadow);
+        cursor: pointer;
+      }
+
+      .theme-toggle span {
+        display: grid;
+        min-height: 34px;
+        place-items: center;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      body:not([data-theme="dark"]) .theme-toggle .light,
+      body[data-theme="dark"] .theme-toggle .dark {
+        background: var(--ink);
+        color: var(--bg);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 0.98fr) minmax(360px, 0.78fr);
+        gap: 22px;
+        align-items: stretch;
+      }
+
+      .message-panel,
+      .form-panel,
+      .rules-panel,
+      .warning-panel {
+        border: 1px solid var(--line);
+        background: color-mix(in srgb, var(--surface) 92%, transparent);
+        box-shadow: 0 24px 60px var(--shadow);
+      }
+
+      .message-panel {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(280px, 0.7fr);
+        gap: 22px;
+        min-height: 590px;
+        padding: clamp(22px, 4vw, 46px);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .message-panel::after {
+        content: "ONLY";
+        position: absolute;
+        right: -30px;
+        bottom: -44px;
+        color: color-mix(in srgb, var(--ink) 8%, transparent);
+        font: 900 clamp(90px, 16vw, 210px) / 0.8 Georgia, serif;
+        pointer-events: none;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0 0 18px;
+        color: var(--gold-strong);
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 42px;
+        height: 2px;
+        background: var(--blue);
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        max-width: 720px;
+        margin-bottom: 22px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(48px, 7vw, 102px);
+        line-height: 0.88;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        max-width: 650px;
+        color: var(--muted);
+        font-size: 19px;
+        line-height: 1.6;
+      }
+
+      .welcome-note {
+        margin-top: 28px;
+        padding: 20px;
+        border-left: 5px solid var(--gold);
+        background: var(--blue-soft);
+        color: var(--ink);
+        font-size: 17px;
+        line-height: 1.55;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 30px;
+      }
+
+      .button {
+        display: inline-flex;
+        min-height: 50px;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 14px 18px;
+        border: 2px solid var(--ink);
+        border-radius: 999px;
+        background: var(--ink);
+        color: var(--bg);
+        cursor: pointer;
+        font: 900 12px/1 "Aptos", "Trebuchet MS", Verdana, sans-serif;
+        letter-spacing: 0.08em;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+      }
+
+      .button:hover,
+      .button:focus-visible {
+        box-shadow: 6px 6px 0 var(--gold);
+        transform: translate(-2px, -2px);
+      }
+
+      .button.secondary {
+        background: transparent;
+        color: var(--ink);
+      }
+
+      .button:disabled {
+        cursor: wait;
+        opacity: 0.68;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .poster-frame {
+        align-self: center;
+        position: relative;
+        z-index: 1;
+      }
+
+      .poster-frame img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 905 / 1080;
+        object-fit: cover;
+        border: 1px solid var(--line);
+        box-shadow: 14px 16px 0 color-mix(in srgb, var(--gold) 58%, transparent);
+      }
+
+      .poster-caption {
+        margin: 14px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .form-panel {
+        padding: clamp(20px, 3vw, 30px);
+      }
+
+      .form-panel h2 {
+        margin-bottom: 10px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(31px, 4vw, 48px);
+        line-height: 0.96;
+      }
+
+      .form-panel > p {
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.55;
+      }
+
+      form,
+      .fields {
+        display: grid;
+        gap: 14px;
+      }
+
+      .fields {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      label {
+        display: grid;
+        gap: 7px;
+        color: var(--ink);
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      label.full {
+        grid-column: 1 / -1;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        min-height: 47px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--field);
+        color: var(--ink);
+        font: 16px/1.35 "Aptos", "Trebuchet MS", Verdana, sans-serif;
+        padding: 12px;
+      }
+
+      textarea {
+        min-height: 86px;
+        resize: vertical;
+      }
+
+      input[type="file"] {
+        padding: 10px;
+      }
+
+      input:focus,
+      textarea:focus,
+      a:focus-visible,
+      button:focus-visible {
+        outline: 3px solid color-mix(in srgb, var(--gold) 42%, transparent);
+        outline-offset: 2px;
+      }
+
+      .notice {
+        min-height: 48px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 13px 14px;
+        color: var(--muted);
+        background: var(--blue-soft);
+        font-size: 15px;
+        line-height: 1.4;
+      }
+
+      .notice.success {
+        color: var(--ink);
+        border-color: color-mix(in srgb, var(--blue) 44%, var(--line));
+        background: color-mix(in srgb, var(--blue-soft) 80%, var(--surface));
+      }
+
+      .notice.error {
+        color: var(--danger);
+        border-color: color-mix(in srgb, var(--danger) 46%, var(--line));
+        background: color-mix(in srgb, var(--danger) 12%, var(--surface));
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+        gap: 22px;
+        margin-top: 22px;
+      }
+
+      .rules-panel,
+      .warning-panel {
+        padding: clamp(20px, 3vw, 32px);
+      }
+
+      .rules-panel h2,
+      .warning-panel h2 {
+        margin-bottom: 14px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(32px, 4vw, 58px);
+        line-height: 0.95;
+      }
+
+      .rule-list,
+      .warning-list {
+        display: grid;
+        gap: 13px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .rule-list li,
+      .warning-list li {
+        display: grid;
+        grid-template-columns: 42px 1fr;
+        gap: 13px;
+        align-items: start;
+        padding-top: 13px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      .rule-list b,
+      .warning-list b {
+        display: grid;
+        width: 42px;
+        height: 42px;
+        place-items: center;
+        border: 1px solid var(--gold);
+        border-radius: 50%;
+        color: var(--gold-strong);
+        font-size: 14px;
+      }
+
+      .warning-panel {
+        border-color: color-mix(in srgb, var(--danger) 32%, var(--line));
+      }
+
+      .warning-panel .eyebrow {
+        color: var(--danger);
+      }
+
+      .verification-strip {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 22px;
+      }
+
+      .verification-strip div {
+        min-height: 96px;
+        padding: 16px;
+        border: 1px solid var(--line);
+        background: color-mix(in srgb, var(--surface-strong) 76%, transparent);
+      }
+
+      .verification-strip b {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--gold-strong);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .verification-strip span {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      @media (max-width: 980px) {
+        .hero,
+        .message-panel,
+        .info-grid,
+        .verification-strip {
+          grid-template-columns: 1fr;
+        }
+
+        .message-panel {
+          min-height: auto;
+        }
+
+        .poster-frame {
+          max-width: 460px;
+        }
+      }
+
+      @media (max-width: 680px) {
+        .shell {
+          width: min(100% - 22px, 1180px);
+          padding-top: 12px;
+        }
+
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .theme-toggle {
+          width: 100%;
+        }
+
+        .fields {
+          grid-template-columns: 1fr;
+        }
+
+        h1 {
+          font-size: clamp(46px, 15vw, 72px);
+        }
+
+        .message-panel,
+        .form-panel,
+        .rules-panel,
+        .warning-panel {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#register">Skip to registration</a>
+    <main class="shell">
+      <header class="topbar" aria-label="Portal header">
+        <div class="brand">
+          <span class="brand-mark">JN</span>
+          <span>
+            Jim Newman
+            <small>Fans Only Registration Portal</small>
+          </span>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch between dark and white mode">
+          <span class="light">White</span>
+          <span class="dark">Dark</span>
+        </button>
+      </header>
+
+      <section class="hero" aria-labelledby="portal-title">
+        <div class="message-panel">
+          <div>
+            <p class="eyebrow">Fan appreciation desk</p>
+            <h1 id="portal-title">Jim Newman Fans Only Registration Portal</h1>
+            <p class="lead">
+              Welcome to the dedicated registration space for Jim Newman fans. This portal is for
+              supporters who want to be recognized respectfully, stay connected to trusted updates,
+              and take part in a safe fan community.
+            </p>
+            <div class="welcome-note">
+              To every fan showing love, encouragement, and patience: thank you for being part of
+              the journey. Please register with accurate details so the fan desk can review and
+              protect each submission with care.
+            </div>
+            <div class="hero-actions">
+              <a class="button" href="#register">Start Registration</a>
+              <a class="button secondary" href="#rules">Read Fan Rules</a>
+            </div>
+          </div>
+          <figure class="poster-frame">
+            <img
+              src="/assets/jim-newman-fan-message.jpeg"
+              alt="Jim Newman fan appreciation and imposter awareness message"
+            />
+            <figcaption class="poster-caption">
+              Registration and communication should remain on trusted channels only.
+            </figcaption>
+          </figure>
+        </div>
+
+        <aside class="form-panel" id="register" aria-labelledby="register-title">
+          <p class="eyebrow">Secure fan intake</p>
+          <h2 id="register-title">Register for review.</h2>
+          <p>
+            Submit the details needed for a Jim Newman fan profile. Approval is not instant; each
+            registration is reviewed before any fan card or portal access is activated.
+          </p>
+          <form id="fan-form">
+            <div class="fields">
+              <label>
+                Full name
+                <input name="fullName" autocomplete="name" required minlength="2" maxlength="100" />
+              </label>
+              <label>
+                Instagram username
+                <input name="instagramUsername" autocomplete="username" required maxlength="50" />
+              </label>
+              <label>
+                Email
+                <input type="email" name="email" autocomplete="email" required />
+              </label>
+              <label>
+                Phone
+                <input name="phone" autocomplete="tel" required minlength="5" maxlength="20" />
+              </label>
+              <label>
+                Date of birth
+                <input type="date" name="dateOfBirth" required />
+              </label>
+              <label>
+                City / region
+                <input name="address" autocomplete="address-level2" required minlength="5" maxlength="120" />
+              </label>
+              <label class="full">
+                Fan note
+                <textarea name="fanNote" maxlength="220" placeholder="Optional message for the fan desk"></textarea>
+              </label>
+            </div>
+            <div class="notice" id="form-status" role="status">
+              Ready to submit a Jim Newman fan registration for review.
+            </div>
+            <button class="button" type="submit">Submit Registration</button>
+          </form>
+        </aside>
+      </section>
+
+      <section class="info-grid" id="rules" aria-label="Fan rules and imposter caution">
+        <article class="rules-panel">
+          <p class="eyebrow">Fan rules and regulations</p>
+          <h2>Respect keeps the community safe.</h2>
+          <ul class="rule-list">
+            <li><b>01</b><span>Use respectful language with Jim Newman, other fans, and portal staff.</span></li>
+            <li><b>02</b><span>Submit only accurate personal details and do not register on behalf of someone else without permission.</span></li>
+            <li><b>03</b><span>Keep fan card details, approval messages, and personal documents private.</span></li>
+            <li><b>04</b><span>Follow trusted updates only and avoid spreading rumors, altered screenshots, or unverified payment claims.</span></li>
+          </ul>
+        </article>
+
+        <article class="warning-panel">
+          <p class="eyebrow">Caution of imposters</p>
+          <h2>Do not trust private requests for money or secrets.</h2>
+          <ul class="warning-list">
+            <li><b>!</b><span>Jim Newman will never privately ask fans for passwords, banking details, gift cards, or emergency payments.</span></li>
+            <li><b>!</b><span>Ignore accounts that pressure, threaten, or rush you to send money for registration approval.</span></li>
+            <li><b>!</b><span>Report suspicious accounts and only engage with trusted pages and portal communications you can verify.</span></li>
+          </ul>
+          <div class="verification-strip" aria-label="Registration process">
+            <div><b>Apply</b><span>Complete the registration form with clear and truthful information.</span></div>
+            <div><b>Review</b><span>The fan desk checks submissions before activation.</span></div>
+            <div><b>Protect</b><span>No staff member should ask for passwords, bank access, or private codes.</span></div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <script>
+      const form = document.querySelector("#fan-form");
+      const statusBox = document.querySelector("#form-status");
+      const themeToggle = document.querySelector("#theme-toggle");
+      const savedTheme = localStorage.getItem("jim-newman-theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+      document.body.dataset.theme = savedTheme || (prefersDark ? "dark" : "light");
+
+      themeToggle.addEventListener("click", () => {
+        const nextTheme = document.body.dataset.theme === "dark" ? "light" : "dark";
+        document.body.dataset.theme = nextTheme;
+        localStorage.setItem("jim-newman-theme", nextTheme);
+      });
+
+      function setStatus(message, type) {
+        statusBox.textContent = message;
+        statusBox.className = "notice" + (type ? " " + type : "");
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const submitButton = form.querySelector("button[type='submit']");
+        submitButton.disabled = true;
+        setStatus("Submitting registration for review...", "");
+
+        try {
+          const data = new FormData(form);
+          const payload = {
+            fullName: String(data.get("fullName") || ""),
+            instagramUsername: String(data.get("instagramUsername") || ""),
+            email: String(data.get("email") || ""),
+            phone: String(data.get("phone") || ""),
+            dateOfBirth: String(data.get("dateOfBirth") || ""),
+            address: String(data.get("address") || ""),
+            fanNote: String(data.get("fanNote") || ""),
+          };
+
+          const response = await fetch("/api/trpc/fan.register", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ json: payload }),
+          });
+
+          const result = await response.json();
+          if (!response.ok || result.error) {
+            throw new Error(result.error && result.error.message ? result.error.message : "Registration failed");
+          }
+
+          const fanId = result.result && result.result.data && result.result.data.json
+            ? result.result.data.json.fanId
+            : "assigned";
+          form.reset();
+          setStatus("Registration submitted for review. Fan ID: " + fanId, "success");
+        } catch (error) {
+          setStatus(error instanceof Error ? error.message : "Registration failed", "error");
+        } finally {
+          submitButton.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>
