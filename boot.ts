@@ -15,7 +15,7 @@ const portalHtml = `<!doctype html>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Jim Newman Portal</title>
+    <title>Portal for Jim Fan Registration</title>
     <style>
       :root {
         color-scheme: light;
@@ -428,7 +428,7 @@ const portalHtml = `<!doctype html>
   <body>
     <main class="shell">
       <nav class="nav" aria-label="Primary">
-        <div class="brand"><span class="mark">JM</span><span>Jim Newman Portal</span></div>
+        <div class="brand"><span class="mark">JM</span><span>Jim Fan Reg Portal</span></div>
         <div class="nav-links">
           <a href="#register">Register</a>
           <a href="/api/trpc/ping">System Check</a>
@@ -437,9 +437,9 @@ const portalHtml = `<!doctype html>
 
       <section class="hero" aria-labelledby="portal-title">
         <div class="headline">
-          <p class="eyebrow">Official fan access desk</p>
-          <h1 id="portal-title">Jim Newman Portal</h1>
-          <p class="lead">A focused intake portal for fan registration, verification review, and Bronze Fan Card activation.</p>
+          <p class="eyebrow">Jim-only fan registration</p>
+          <h1 id="portal-title">Portal for Jim Fan Reg</h1>
+          <p class="lead">A focused intake portal reserved for Jim fan registration, verification review, and Bronze Fan Card activation.</p>
           <div class="hero-actions">
             <a class="button" href="#register">Start Registration</a>
             <a class="button secondary" href="/api/trpc/ping">Check API</a>
@@ -462,7 +462,7 @@ const portalHtml = `<!doctype html>
       <section class="section" id="register" aria-labelledby="register-title">
         <div class="section-copy">
           <h2 id="register-title">Register for access.</h2>
-          <p>Submit the details needed to create a Jim Newman fan profile. Approved registrations receive an activated card after review.</p>
+          <p>Submit the details needed to create a Jim-only fan profile. Approved registrations receive an activated card after review.</p>
           <div class="steps" aria-label="Portal process">
             <div class="step"><b>01 Apply</b>Enter profile and contact details.</div>
             <div class="step"><b>02 Review</b>Documents are checked by the admin desk.</div>
@@ -506,7 +506,7 @@ const portalHtml = `<!doctype html>
                 <input type="file" name="faceCapture" accept="image/png,image/jpeg" />
               </label>
             </div>
-            <div class="notice" id="form-status" role="status">Ready to submit a Jim Newman fan registration.</div>
+            <div class="notice" id="form-status" role="status">Ready to submit a Jim fan registration.</div>
             <button class="button" type="submit">Submit Registration</button>
           </form>
         </div>
